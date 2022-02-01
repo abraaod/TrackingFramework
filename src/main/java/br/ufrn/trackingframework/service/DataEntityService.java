@@ -1,8 +1,8 @@
 package br.ufrn.trackingframework.service;
 
 import br.ufrn.trackingframework.Model.DataEntity;
+import br.ufrn.trackingframework.repository.DataEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -12,15 +12,15 @@ import reactor.core.publisher.Mono;
 public class DataEntityService {
 
     @Autowired
-    private ReactiveMongoTemplate reactiveMongoTemplate;
+    private DataEntityRepository repository;
 
     public Flux<DataEntity> findAll(){
-        return reactiveMongoTemplate.findAll(DataEntity.class);
+        return repository.findAll();
     }
 
     public Mono<DataEntity> save(DataEntity dataEntity){
-        return reactiveMongoTemplate.save(dataEntity);
+        return repository.save(dataEntity);
     }
 
-
+    public Mono deleteAll() { return repository.deleteAll(); }
 }

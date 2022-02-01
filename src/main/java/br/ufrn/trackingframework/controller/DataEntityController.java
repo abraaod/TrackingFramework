@@ -20,7 +20,8 @@ public class DataEntityController {
     }
 
     @PostMapping
-    public Mono<DataEntity> saveDataEntityMono(@RequestBody DataEntity dataEntity){
-        return service.save(dataEntity);
-    }
+    public Mono<DataEntity> saveDataEntityMono(@RequestBody DataEntity dataEntity) { return service.save(dataEntity); }
+
+    @DeleteMapping
+    public Mono deleteAllDataEntityMono() { return service.deleteAll(); }
 }
