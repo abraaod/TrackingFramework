@@ -1,45 +1,24 @@
 package br.ufrn.trackingframework.Model;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import org.springframework.data.annotation.Id;
+import br.ufrn.trackingframework.helper.DataEntityValidator;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.HashMap;
-import java.util.Map;
-
-
 @Document(collection = "dataentities")
-public class DataEntity {
-
-    @Id
-    private String id;
+public class DataEntity extends AbstractModel{
 
     @Indexed(unique = true)
     private String dataEntity;
 
-    private Map<String, Object> data;
+    @Override
+    public void add(String key, Object value) {
 
-    @JsonAnySetter
-    public void add(String key, Object value){
-        if(data == null){
-            data = new HashMap<>();
+        if(DataEntityValidator.isValid(value)){
+            super.add(key, value);
+        } else {
+            //TODO improve this runtime exception
+            throw new RuntimeException();
         }
-        data.put(key, value);
-    }
-
-    @JsonAnyGetter
-    public Map<String, Object> get(){
-        return data;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getDataEntity() {
@@ -49,5 +28,4 @@ public class DataEntity {
     public void setDataEntity(String dataEntity) {
         this.dataEntity = dataEntity;
     }
-
 }
