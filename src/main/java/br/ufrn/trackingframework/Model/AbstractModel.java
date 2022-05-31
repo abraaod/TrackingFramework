@@ -10,11 +10,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class AbstractModel {
 
     @Id
-    private String id;
+    private String id = UUID.randomUUID().toString();
 
     @CreatedDate
     @DateTimeFormat()
