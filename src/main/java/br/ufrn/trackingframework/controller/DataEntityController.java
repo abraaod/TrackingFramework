@@ -16,12 +16,15 @@ public class DataEntityController {
 
     @GetMapping
     public Flux<DataEntity> getDataEntityFlux(){
-        return  service.findAll();
+        return service.findAll();
     }
+
+    @GetMapping("/{id}")
+    public Mono<DataEntity> getDataEntityByIdMono(@PathVariable String id) { return service.getById(id); }
 
     @PostMapping
     public Mono<DataEntity> saveDataEntityMono(@RequestBody DataEntity dataEntity) { return service.save(dataEntity); }
 
-    @DeleteMapping
-    public Mono deleteAllDataEntityMono() { return service.deleteAll(); }
+    @DeleteMapping("/{id}")
+    public Mono deleteByIdDataEntityMono(@PathVariable String id) { return service.deleteById(id); }
 }
