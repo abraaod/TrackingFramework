@@ -1,6 +1,5 @@
 package br.ufrn.trackingframework.Model;
 
-import br.ufrn.trackingframework.helper.DataEntityValidator;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -12,11 +11,10 @@ public class DataEntity extends AbstractModel{
 
     @Override
     public void add(String key, Object value) {
-
-        if(DataEntityValidator.isValid(value)){
+        if(key.equalsIgnoreCase("fields")){
             super.add(key, value);
         } else {
-            //TODO improve this runtime exception
+            // TODO improve exception handling
             throw new RuntimeException();
         }
     }
@@ -27,5 +25,12 @@ public class DataEntity extends AbstractModel{
 
     public void setDataEntity(String dataEntity) {
         this.dataEntity = dataEntity;
+    }
+
+    @Override
+    public String toString() {
+        return "DataEntity{" +
+                "dataEntity='" + dataEntity + '\'' +
+                '}' + super.toString();
     }
 }
