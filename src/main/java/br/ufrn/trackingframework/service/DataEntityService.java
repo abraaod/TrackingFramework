@@ -1,31 +1,45 @@
 package br.ufrn.trackingframework.service;
 
+import br.ufrn.trackingframework.Model.AbstractModel;
 import br.ufrn.trackingframework.Model.DataEntity;
 import br.ufrn.trackingframework.repository.DataEntityRepository;
+import br.ufrn.trackingframework.repository.GenericRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
+import org.springframework.data.redis.core.ReactiveRedisOperations;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.server.ServerResponse;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@Service
-public class DataEntityService {
+import javax.swing.text.html.parser.Entity;
+import javax.xml.crypto.Data;
+import java.util.Date;
+import java.util.UUID;
 
+@Service
+public class DataEntityService extends AbstractService{
+
+    protected final ReactiveRedisOperations<String, DataEntity> redisOperations;
     @Autowired
     private DataEntityRepository repository;
 
-    public Flux<DataEntity> findAll(){
-        return repository.findAll();
+    public DataEntityService(ReactiveRedisOperations<String, DataEntity> redisOperations) {
+        this.redisOperations = redisOperations;
     }
 
-    public Mono<DataEntity> getById(String id) { return repository.findById(id); }
-
-    public Mono<DataEntity> save(DataEntity dataEntity){
-        return repository.save(dataEntity);
+    @Override
+    protected GenericRepository repository() {
+        return this.repository;
     }
 
-    public Mono deleteById(String id) {
-        return repository.deleteById(id);
+    @Override
+    public Mono save(AbstractModel object) {
+        Date date = new Date();
+        if(object.getId() == null){
+            object.setId(UUID.randomUUID().toString());
+            object.setCreatedDate(date);
+        }
+        object.setLastModifiedDate(date);
+        DataEntity dataEntity = (DataEntity) object;
+        redisOperations.opsForValue().set(dataEntity.getId(), dataEntity).subscribe();
+        return super.save(object);
     }
 }

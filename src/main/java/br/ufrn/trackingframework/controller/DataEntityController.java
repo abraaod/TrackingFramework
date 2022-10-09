@@ -1,30 +1,22 @@
 package br.ufrn.trackingframework.controller;
 
 import br.ufrn.trackingframework.Model.DataEntity;
+import br.ufrn.trackingframework.service.AbstractService;
 import br.ufrn.trackingframework.service.DataEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@CrossOrigin(origins = "*")
+
 @RestController
-public class DataEntityController {
+public class DataEntityController extends AbstractController<DataEntity, String>{
 
     @Autowired
     DataEntityService service;
 
-    @GetMapping
-    public Flux<DataEntity> getDataEntityFlux(){
-        return service.findAll();
+    @Override
+    protected AbstractService<DataEntity, String> service() {
+        return this.service;
     }
 
-    @GetMapping("/{id}")
-    public Mono<DataEntity> getDataEntityByIdMono(@PathVariable String id) { return service.getById(id); }
-
-    @PostMapping
-    public Mono<DataEntity> saveDataEntityMono(@RequestBody DataEntity dataEntity) { return service.save(dataEntity); }
-
-    @DeleteMapping("/{id}")
-    public Mono deleteByIdDataEntityMono(@PathVariable String id) { return service.deleteById(id); }
 }
