@@ -5,10 +5,10 @@ import br.ufrn.trackingframework.service.AbstractService;
 import br.ufrn.trackingframework.service.DataEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Mono;
 
 
-@RestController
+@RestController()
+@RequestMapping("dataentities")
 public class DataEntityController extends AbstractController<DataEntity, String>{
 
     @Autowired
