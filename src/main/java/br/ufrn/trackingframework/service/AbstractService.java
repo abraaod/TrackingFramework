@@ -2,9 +2,6 @@ package br.ufrn.trackingframework.service;
 
 import br.ufrn.trackingframework.Model.AbstractModel;
 import br.ufrn.trackingframework.repository.GenericRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.ReactiveRedisOperations;
-import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
