@@ -9,8 +9,7 @@ import org.springframework.data.redis.core.ReactiveRedisOperations;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-import javax.swing.text.html.parser.Entity;
-import javax.xml.crypto.Data;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
@@ -41,5 +40,16 @@ public class DataEntityService extends AbstractService{
         DataEntity dataEntity = (DataEntity) object;
         redisOperations.opsForValue().set(dataEntity.getId(), dataEntity).subscribe();
         return super.save(object);
+    }
+
+    @Override
+    public Mono getById(Serializable id) {
+        return redisOperations.opsForValue().get(id).switchIfEmpty(super.getById(id));
+    }
+
+    @Override
+    public Mono delete(Serializable id) {
+        redisOperations.delete((String) id).subscribe();
+        return super.delete(id);
     }
 }
