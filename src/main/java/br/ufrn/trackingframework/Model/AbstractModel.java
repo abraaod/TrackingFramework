@@ -1,29 +1,24 @@
 package br.ufrn.trackingframework.Model;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class AbstractModel {
 
     @Id
-    private String id = UUID.randomUUID().toString();
+    private String id;
 
     @CreatedDate
-    @DateTimeFormat()
-    private Date creationDate = new Date();
+    private Date createdDate;
 
     @LastModifiedDate
-    @DateTimeFormat()
-    private Date modificationDate;
+    private Date lastModifiedDate;
 
     private Map<String, Object> data;
 
@@ -48,19 +43,29 @@ public class AbstractModel {
         this.id = id;
     }
 
-    public Date getCreationDate() {
-        return creationDate;
+    public Date getCreatedDate() {
+        return createdDate;
     }
 
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 
-    public Date getModificationDate() {
-        return modificationDate;
+    public Date getLastModifiedDate() {
+        return lastModifiedDate;
     }
 
-    public void setModificationDate(Date modificationDate) {
-        this.modificationDate = modificationDate;
+    public void setLastModifiedDate(Date lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+    @Override
+    public String toString() {
+        return "AbstractModel{" +
+                "id='" + id + '\'' +
+                ", createdDate=" + createdDate +
+                ", lastModifiedDate=" + lastModifiedDate +
+                ", data=" + data +
+                '}';
     }
 }
