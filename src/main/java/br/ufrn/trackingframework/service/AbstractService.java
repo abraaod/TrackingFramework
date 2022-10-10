@@ -7,6 +7,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.util.UUID;
 
 @Service
 public abstract class AbstractService<T extends AbstractModel, PK extends Serializable> {
@@ -27,5 +29,15 @@ public abstract class AbstractService<T extends AbstractModel, PK extends Serial
 
     public Mono delete(PK id){
         return repository().deleteById(id);
+    }
+
+    public T updateObject(T object){
+        Date date = new Date();
+        if(object.getId() == null){
+            object.setId(UUID.randomUUID().toString());
+            object.setCreatedDate(date);
+        }
+        object.setLastModifiedDate(date);
+        return object;
     }
 }
