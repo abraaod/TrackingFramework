@@ -31,12 +31,7 @@ public class DataEntityService extends AbstractService{
 
     @Override
     public Mono save(AbstractModel object) {
-        Date date = new Date();
-        if(object.getId() == null){
-            object.setId(UUID.randomUUID().toString());
-            object.setCreatedDate(date);
-        }
-        object.setLastModifiedDate(date);
+        object = super.updateObject(object);
         DataEntity dataEntity = (DataEntity) object;
         redisOperations.opsForValue().set(dataEntity.getId(), dataEntity).subscribe();
         return super.save(object);
