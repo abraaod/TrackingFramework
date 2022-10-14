@@ -20,6 +20,10 @@ public class AbstractModel {
     @LastModifiedDate
     private Date lastModifiedDate;
 
+    private Long latitude;
+
+    private Long longitude;
+
     private Map<String, Object> data;
 
     @JsonAnySetter
@@ -59,12 +63,30 @@ public class AbstractModel {
         this.lastModifiedDate = lastModifiedDate;
     }
 
+    public Long getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Long latitude) {
+        this.latitude = latitude;
+    }
+
+    public Long getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Long longitude) {
+        this.longitude = longitude;
+    }
+
     @Override
     public String toString() {
         return "AbstractModel{" +
                 "id='" + id + '\'' +
                 ", createdDate=" + createdDate +
                 ", lastModifiedDate=" + lastModifiedDate +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
                 ", data=" + data +
                 '}';
     }
