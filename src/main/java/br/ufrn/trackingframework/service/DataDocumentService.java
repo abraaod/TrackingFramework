@@ -26,6 +26,9 @@ public class DataDocumentService extends AbstractService{
     @Autowired
     private DataEntityService dataEntityService;
 
+    Duration duration = Duration.ofMinutes(5);
+
+
     @Override
     protected GenericRepository repository() {
         return this.repository;
@@ -37,13 +40,12 @@ public class DataDocumentService extends AbstractService{
 
     @Override
     public Mono save(AbstractModel object) {
-        object = super.updateObject(object);
+        object = super.updateObjectDates(object);
         DataDocument dataDocument = (DataDocument) object;
-        Duration duration = Duration.ofSeconds(30);
         Mono<DataDocument> dataDocumentMono = dataEntityService.getById(dataDocument.getDataEntityId()).flatMap(entity -> fieldValidator((DataEntity) entity, dataDocument));
         return dataDocumentMono.flatMap(document -> {
             redisOperationsDocument.opsForValue().set(document.getId(), document, duration).subscribe();
-            return Mono.just(document);
+            return super.save(document);
         });
     }
 

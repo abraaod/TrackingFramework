@@ -9,6 +9,7 @@ import reactor.core.publisher.Mono;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 @Service
 public abstract class AbstractService<T extends AbstractModel, PK extends Serializable> {
@@ -31,11 +32,18 @@ public abstract class AbstractService<T extends AbstractModel, PK extends Serial
         return repository().deleteById(id);
     }
 
-    public T updateObject(T object){
+    public T updateObjectDates(T object){
         Date date = new Date();
         if(object.getId() == null){
             object.setId(UUID.randomUUID().toString());
             object.setCreatedDate(date);
+        } else {
+            try {
+                Date oldDate = getById((PK) object.getId()).toFuture().get().getCreatedDate();
+                object.setCreatedDate(oldDate != null ? oldDate : date);
+            } catch (InterruptedException | ExecutionException e) {
+                throw new RuntimeException(e);
+            }
         }
         object.setLastModifiedDate(date);
         return object;
